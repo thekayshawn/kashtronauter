@@ -58,7 +58,6 @@ function App() {
         <span></span>
         <span></span>
         <span></span>
-        <span></span>
       </section>
       {/* Foreground Image */}
       <img
