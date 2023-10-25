@@ -39,16 +39,33 @@ function App() {
 
   return (
     <>
+      {/* Background Image */}
       <img
+        aria-hidden="true"
         ref={backgroundImgRef}
         src="/images/background.jpg"
         className="absolute w-full h-full object-cover object-center z-0 opacity-40 origin-bottom scale-125"
         alt="An interstellar black hole surrounded by asteroidal terrain and gorgeous space landscape."
       />
+      {/* Shooting Stars */}
+      <section aria-hidden="true" className="shooting-stars z-1">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </section>
+      {/* Foreground Image */}
       <img
+        aria-hidden="true"
         ref={foregroundImgRef}
         src="/images/foreground.png"
-        className="absolute w-full h-full object-cover object-bottom z-1 origin-center scale-125"
+        className="absolute w-full h-full object-cover object-bottom z-2 origin-center scale-125"
         alt="An interstellar black hole surrounded by asteroidal terrain and gorgeous space landscape."
       />
     </>
