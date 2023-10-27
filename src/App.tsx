@@ -90,16 +90,18 @@ function App() {
         return;
       }
 
-      // Once images are loaded, fade both images in.
+      // Once images are loaded, fade preloader out.
+      document.querySelector(".preloader")?.classList.add("opacity-0");
+
+      // Then, fade both images in
       backgroundImg!.classList.remove("!opacity-0");
       foregroundImg!.classList.remove("!opacity-0");
 
       // After 1 second, fade in shooting stars.
       setTimeout(() => {
-        const shootingStars = document.querySelector(
-          ".shooting-stars"
-        ) as HTMLElement;
-        shootingStars.classList.remove("opacity-0");
+        document
+          .querySelector(".shooting-stars")
+          ?.classList.remove("opacity-0");
       }, 1000);
     }
 
