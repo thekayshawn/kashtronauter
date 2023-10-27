@@ -1,0 +1,184 @@
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  /* border: 1px solid red; */
+  font-family: "Bricolage Grotesque", sans-serif;
+}
+
+@function randomNum($min, $max) {
+  $rand: random();
+  $randomNum: $min + floor($rand * (($max - $min) + 1));
+
+  @return $randomNum;
+}
+
+/* Preloader */
+.preloader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  place-items: center;
+
+  span {
+    content: "";
+    display: inline-block;
+    width: 2px;
+    height: 2px;
+    background-color: white;
+    border-radius: 50%;
+    position: absolute;
+    box-shadow: 0 0 1px rgba(255, 255, 255, 1),
+      0 0 0 2px rgba(255, 255, 255, 0.1);
+    animation: arbitrary 5s ease-in-out infinite;
+  }
+
+  @for $i from 1 through 100 {
+    span:nth-child(#{$i}) {
+      top: randomNum(10, 90) * 1%;
+      left: randomNum(10, 90) * 1%;
+      animation-delay: #{randomNum(0, 5)}s;
+    }
+  }
+}
+
+@keyframes arbitrary {
+  0% {
+    transform: translateX(0rem);
+    opacity: 0.5;
+  }
+  25% {
+    transform: translateX(0.25rem);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateX(0rem);
+    opacity: 0.1;
+  }
+  75% {
+    transform: translateX(-0.25rem);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateX(0rem);
+    opacity: 0.5;
+  }
+}
+
+/* Shooting Stars */
+/* @see https://codepen.io/delroyprithvi/pen/LYyJROR */
+.shooting-stars {
+  @apply fixed w-screen h-screen top-0 left-0;
+
+  span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 4px;
+    height: 4px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.1),
+      0 0 0 8px rgba(255, 255, 255, 0.1), 0 0 20px rgba(255, 255, 255, 0.1);
+    animation: shooting-star 5s linear infinite;
+  }
+  span::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 300px;
+    height: 1px;
+    background: linear-gradient(90deg, #fff, transparent);
+  }
+  span:nth-child(1) {
+    top: 0;
+    right: 0;
+    left: initial;
+    animation-delay: 0s;
+    animation-duration: 3s;
+  }
+  span:nth-child(2) {
+    top: 0;
+    right: 80px;
+    left: initial;
+    animation-delay: 0.2s;
+    animation-duration: 5s;
+  }
+  span:nth-child(3) {
+    top: 80;
+    right: 0px;
+    left: initial;
+    animation-delay: 0.4s;
+    animation-duration: 4s;
+  }
+  span:nth-child(4) {
+    top: 0;
+    right: 180px;
+    left: initial;
+    animation-delay: 0.6s;
+    animation-duration: 3.5s;
+  }
+  span:nth-child(5) {
+    top: 0;
+    right: 400px;
+    left: initial;
+    animation-delay: 0.8s;
+    animation-duration: 4.5s;
+  }
+  span:nth-child(6) {
+    top: 0;
+    right: 600px;
+    left: initial;
+    animation-delay: 1s;
+    animation-duration: 5s;
+  }
+  span:nth-child(7) {
+    top: 300px;
+    right: 0px;
+    left: initial;
+    animation-delay: 1.2s;
+    animation-duration: 3.75s;
+  }
+  span:nth-child(8) {
+    top: 0px;
+    right: 700px;
+    left: initial;
+    animation-delay: 1.4s;
+    animation-duration: 3.25s;
+  }
+  span:nth-child(9) {
+    top: 0px;
+    right: 1000px;
+    left: initial;
+    animation-delay: 0.75s;
+    animation-duration: 4.25s;
+  }
+  span:nth-child(9) {
+    top: 0px;
+    right: 450px;
+    left: initial;
+    animation-delay: 2.75s;
+    animation-duration: 4.75s;
+  }
+}
+
+@keyframes shooting-star {
+  0% {
+    transform: rotate(315deg) translateX(0);
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(315deg) translateX(-2000px);
+    opacity: 0;
+  }
+}
