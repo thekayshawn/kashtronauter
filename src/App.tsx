@@ -93,16 +93,16 @@ function App() {
       // Once images are loaded, fade preloader out.
       document.querySelector(".preloader")?.classList.add("opacity-0");
 
-      // Then, fade both images in
-      backgroundImg!.classList.remove("!opacity-0");
-      foregroundImg!.classList.remove("!opacity-0");
+      // Remove overflow-y-hidden from body and root.
+      document.body.classList.remove("overflow-y-hidden");
+      document.getElementById("root")!.classList.remove("overflow-y-hidden");
 
-      // After 1 second, fade in shooting stars.
-      setTimeout(() => {
-        document
-          .querySelector(".shooting-stars")
-          ?.classList.remove("opacity-0");
-      }, 1000);
+      // Then, fade everything in.
+      Array.from(document.getElementsByClassName("!opacity-0")).forEach(
+        (el) => {
+          el.classList.remove("!opacity-0");
+        }
+      );
     }
 
     function handleBgImgLoad() {
@@ -140,7 +140,7 @@ function App() {
       {/* Shooting Stars */}
       <section
         aria-hidden="true"
-        className="shooting-stars z-shootingStars transition-opacity duration-1000 opacity-0"
+        className="shooting-stars z-shootingStars transition-opacity duration-1000 !opacity-0 delay-2000"
       >
         <span></span>
         <span></span>
@@ -157,9 +157,32 @@ function App() {
         aria-hidden="true"
         ref={foregroundImgRef}
         src="/images/foreground.png"
-        className="fg-image absolute w-full h-full object-cover object-bottom z-fgImage origin-center scale-125 transition-opacity duration-1000 !opacity-0"
+        className="fg-image absolute w-full h-full object-cover object-bottom z-fgImage origin-bottom lg:origin-center scale-125 transition-opacity duration-1000 !opacity-0"
         alt="An interstellar black hole surrounded by asteroidal terrain and gorgeous space landscape."
       />
+      <div className="welcome-text z-welcomeText px-4 pt-8 md:px-0 text-center text-white opacity-100 relative">
+        <h1 className="text-[7.5vw] lg:text-[5vw] font-bold transition-opacity duration-1000 !opacity-0">
+          Welcome Stranger!
+        </h1>
+        <p className="transition-opacity duration-1000 !opacity-0 delay-1000 mt-4 md:mt-0">
+          Press{" "}
+          <span className="font-bold underline underline-offset-8">
+            any key
+          </span>{" "}
+          to begin your journey through the cosmos.
+        </p>
+      </div>
+      <p className="fixed inline-block bottom-4 lg:bottom-8 right-4 lg:right-8 z-aboutText text-right text-xs drop-shadow-sm shadow-black">
+        An interstellar creation by{" "}
+        <a
+          href="https://oikashan.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-bold underline underline-offset-8 hover:underline-offset-4 focus:underline-offset-4 transition-all"
+        >
+          Kashan
+        </a>
+      </p>
     </>
   );
 }
