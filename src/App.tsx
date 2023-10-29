@@ -1,5 +1,6 @@
 import SpaceShip from "./SpaceShip";
 import { useEffect, useRef } from "react";
+import { isScreenSize } from "./utils";
 
 function App() {
   const backgroundImgRef = useRef<HTMLImageElement>(null);
@@ -109,8 +110,9 @@ function App() {
         document.querySelector(tag)?.classList.remove("!opacity-0");
       });
 
-      // Now, add keydown listener to window.
+      // Now, add keydown and click listener to window.
       window.addEventListener("keydown", handleWindowKeyDown);
+      window.addEventListener("click", handleWindowKeyDown);
     }
 
     function handleBgImgLoad() {
@@ -125,8 +127,9 @@ function App() {
 
     /// 3. Setup keydown effect.
     function handleWindowKeyDown() {
-      // Remove the listener to prevent multiple keydowns.
+      // Remove the listener to prevent multiple keydowns and clicks.
       window.removeEventListener("keydown", handleWindowKeyDown);
+      window.removeEventListener("click", handleWindowKeyDown);
 
       // Fade out the welcome text.
       document.querySelector(".welcome-text")?.classList.add("!opacity-0");
@@ -145,49 +148,92 @@ function App() {
       document.querySelector(".shooting-stars")?.classList.add("!opacity-0");
 
       // Then, get the space ship.
-      const $spaceShipWrapper = document.getElementById("spaceShip");
-      const $spaceShip = document.querySelector("#spaceShip svg");
+      const $spaceShip = document.getElementById("spaceShip");
       const $hyperdriveCounter = document.getElementById("hyperdriveCounter");
 
-      // and animate it in.
-      $spaceShipWrapper?.classList.remove("!z-0", "!opacity-0", "!scale-[2]");
+      if (!$spaceShip || !$hyperdriveCounter) return;
 
-      let counter = $hyperdriveCounter
-        ? parseInt($hyperdriveCounter.innerHTML)
-        : 5;
+      // And animate it in.
+      $spaceShip.classList.remove("!z-0", "!opacity-0", "!scale-[2]");
 
-      const hyperdriveInterval = setInterval(() => {
-        counter--;
+      // Let the ship animate in for 1 second.
+      setTimeout(() => {
+        // Add shake animation to the space ship.
+        $spaceShip.classList.add("animate-shake");
 
-        // Update the counter
-        if ($hyperdriveCounter) $hyperdriveCounter.innerHTML = counter + "";
+        // Fade out the background image.
+        backgroundImg!.classList.add("!opacity-0");
+      }, 2000);
 
-        // As soon as counter reaches 0,
-        if (counter === 0) {
-          // Clear the interval
-          clearInterval(hyperdriveInterval);
+      let counter = parseInt($hyperdriveCounter.innerHTML);
 
-          // Remove the counter
-          $hyperdriveCounter?.remove();
+      // Play the hyperdrive sound.
+      new Audio("/hyperdrive.mp3").play();
 
-          // Then, play the hyperdrive sound.
-          new Audio("/hyperdrive.mp3").play();
+      setTimeout(() => {
+        // An interval that counts down from 3 to 0.
+        const hyperdriveInterval = setInterval(() => {
+          counter--;
 
-          return;
-        }
+          // As soon as counter reaches 0,
+          if (counter === 0) {
+            // Clear the interval
+            clearInterval(hyperdriveInterval);
+
+            // Remove the counter
+            $hyperdriveCounter.parentElement?.classList.add("!opacity-0");
+
+            // Wait for 1 second, then
+            // replace base shake animation with intense shake animation.
+            setTimeout(() => {
+              $spaceShip.classList.remove("animate-shake");
+              $spaceShip.classList.add("animate-shake-intense");
+
+              // Wait for 14 seconds, this is the duration of the hyperdrive.
+              setTimeout(() => {
+                // Replace intense shake with base shake.
+                $spaceShip.classList.remove("animate-shake-intense");
+                $spaceShip.classList.add("animate-shake");
+
+                // After 7 seconds, remove the shake animation.
+                setTimeout(() => {
+                  $spaceShip.classList.remove("animate-shake");
+                }, 8000);
+              }, 14000);
+            }, 1000);
+
+            return;
+          }
+
+          // Otherwise, update the counter.
+          if ($hyperdriveCounter) $hyperdriveCounter.innerHTML = counter + "";
+        }, 1000);
+        // Wait for 1 second, the ship animates meanwhile.
       }, 1000);
     }
 
-    window.addEventListener("mousemove", handleMouseMove);
     backgroundImg.addEventListener("load", handleBgImgLoad);
     foregroundImg.addEventListener("load", handleFgImgLoad);
 
+    // Mousemove listener is only for desktop devices.
+    if (isScreenSize("lg")) {
+      window.addEventListener("mousemove", handleMouseMove);
+    }
+
     return () => {
+      // Remove the image loading interval.
       clearInterval(imageLoadingInterval);
+
+      // Remove the mousemove listener.
       window.removeEventListener("mousemove", handleMouseMove);
+
+      // Remove the load listeners.
       backgroundImg.removeEventListener("load", handleBgImgLoad);
       foregroundImg.removeEventListener("load", handleFgImgLoad);
+
+      // Remove the keydown and click listener.
       window.removeEventListener("keydown", handleWindowKeyDown);
+      window.removeEventListener("click", handleWindowKeyDown);
     };
   }, []);
 

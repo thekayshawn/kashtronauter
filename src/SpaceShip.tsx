@@ -2,13 +2,13 @@ export default function SpaceShip() {
   return (
     <div
       id="spaceShip"
-      className="fixed w-screen h-screen top-0 left-0 !scale-[2] !opacity-0 !z-0 transition-all duration-1000 ease-out delay-1000 z-spaceShip"
+      className="fixed w-screen h-screen top-0 left-0 transition-all duration-1000 ease-out delay-1000 z-spaceShip !z-0 !opacity-0 !scale-[2]"
     >
-      <div className="text-lg text-center absolute left-1/2 -translate-x-1/2 z-countdown">
-        Initiating Hyperdrive in{" "}
-        <span id="hyperdriveCounter" className="font-bold">
-          5
-        </span>
+      <div className="w-full fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-countdown flex flex-col items-center font-bold transition-opacity duration-1000 ease-out">
+        <div className="text-[5vw] lg:text-[3vw]">Initiating Hyperdrive in</div>{" "}
+        <div id="hyperdriveCounter" className="text-[20vw]">
+          3
+        </div>
       </div>
       <svg
         fill="none"
@@ -17,7 +17,7 @@ export default function SpaceShip() {
         aria-hidden="true"
         viewBox="0 0 9105 6357"
         xmlns="http://www.w3.org/2000/svg"
-        className="fixed w-auto h-screen top-0 lg:top-auto lg:-bottom-48 left-1/2 origin-center -translate-x-1/2 lg:w-screen lg:h-auto lg:scale-[1.01] z-spaceShip"
+        className="fixed w-auto h-screen top-0 left-1/2 lg:top-[60%] origin-center -translate-x-1/2 lg:-translate-y-1/2 lg:w-screen lg:h-auto lg:scale-[1.01] z-spaceShip"
       >
         <g id="Space Ship">
           <g id="Group 7">
