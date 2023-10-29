@@ -17,6 +17,8 @@ export default {
         welcomeText: 4,
         fgImage: 5,
         aboutText: 6,
+        spaceShip: 7,
+        countdown: 8,
       },
     },
   },

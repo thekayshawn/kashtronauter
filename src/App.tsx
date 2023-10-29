@@ -1,3 +1,4 @@
+import SpaceShip from "./SpaceShip";
 import { useEffect, useRef } from "react";
 
 function App() {
@@ -98,11 +99,18 @@ function App() {
       document.getElementById("root")!.classList.remove("overflow-y-hidden");
 
       // Then, fade everything in.
-      Array.from(document.getElementsByClassName("!opacity-0")).forEach(
-        (el) => {
-          el.classList.remove("!opacity-0");
-        }
-      );
+      [
+        ".bg-image",
+        ".fg-image",
+        ".shooting-stars",
+        ".welcome-text h1",
+        ".welcome-text p",
+      ].forEach((tag) => {
+        document.querySelector(tag)?.classList.remove("!opacity-0");
+      });
+
+      // Now, add keydown listener to window.
+      window.addEventListener("keydown", handleWindowKeyDown);
     }
 
     function handleBgImgLoad() {
@@ -115,6 +123,61 @@ function App() {
       if (numOfImagesLoaded === 2) handleImgLoad();
     }
 
+    /// 3. Setup keydown effect.
+    function handleWindowKeyDown() {
+      // Remove the listener to prevent multiple keydowns.
+      window.removeEventListener("keydown", handleWindowKeyDown);
+
+      // Fade out the welcome text.
+      document.querySelector(".welcome-text")?.classList.add("!opacity-0");
+
+      // Then, slide down the foreground image.
+      foregroundImg!.setAttribute(
+        "style",
+        // Foreground image moves at half speed.
+        `--tw-translate-y: 100%; transition: transform 2s ease-in-out .5s`
+      );
+
+      // And remove the mousemove listener.
+      window.removeEventListener("mousemove", handleMouseMove);
+
+      // Then, fade out the shooting stars.
+      document.querySelector(".shooting-stars")?.classList.add("!opacity-0");
+
+      // Then, get the space ship.
+      const $spaceShipWrapper = document.getElementById("spaceShip");
+      const $spaceShip = document.querySelector("#spaceShip svg");
+      const $hyperdriveCounter = document.getElementById("hyperdriveCounter");
+
+      // and animate it in.
+      $spaceShipWrapper?.classList.remove("!z-0", "!opacity-0", "!scale-[2]");
+
+      let counter = $hyperdriveCounter
+        ? parseInt($hyperdriveCounter.innerHTML)
+        : 5;
+
+      const hyperdriveInterval = setInterval(() => {
+        counter--;
+
+        // Update the counter
+        if ($hyperdriveCounter) $hyperdriveCounter.innerHTML = counter + "";
+
+        // As soon as counter reaches 0,
+        if (counter === 0) {
+          // Clear the interval
+          clearInterval(hyperdriveInterval);
+
+          // Remove the counter
+          $hyperdriveCounter?.remove();
+
+          // Then, play the hyperdrive sound.
+          new Audio("/hyperdrive.mp3").play();
+
+          return;
+        }
+      }, 1000);
+    }
+
     window.addEventListener("mousemove", handleMouseMove);
     backgroundImg.addEventListener("load", handleBgImgLoad);
     foregroundImg.addEventListener("load", handleFgImgLoad);
@@ -124,6 +187,7 @@ function App() {
       window.removeEventListener("mousemove", handleMouseMove);
       backgroundImg.removeEventListener("load", handleBgImgLoad);
       foregroundImg.removeEventListener("load", handleFgImgLoad);
+      window.removeEventListener("keydown", handleWindowKeyDown);
     };
   }, []);
 
@@ -160,7 +224,7 @@ function App() {
         className="fg-image absolute w-full h-full object-cover object-bottom z-fgImage origin-bottom lg:origin-center scale-125 transition-opacity duration-1000 !opacity-0"
         alt="An interstellar black hole surrounded by asteroidal terrain and gorgeous space landscape."
       />
-      <div className="welcome-text z-welcomeText px-4 pt-8 md:px-0 text-center text-white opacity-100 relative">
+      <div className="welcome-text z-welcomeText px-4 pt-8 md:px-0 text-center text-white opacity-100 relative transition-opacity duration-1000">
         <h1 className="text-[7.5vw] lg:text-[5vw] font-bold transition-opacity duration-1000 !opacity-0">
           Welcome Stranger!
         </h1>
@@ -175,14 +239,15 @@ function App() {
       <p className="fixed inline-block bottom-4 lg:bottom-8 right-4 lg:right-8 z-aboutText text-right text-xs drop-shadow-sm shadow-black">
         An interstellar creation by{" "}
         <a
-          href="https://oikashan.com"
           target="_blank"
           rel="noopener noreferrer"
+          href="https://oikashan.com"
           className="font-bold underline underline-offset-8 hover:underline-offset-4 focus:underline-offset-4 transition-all"
         >
           Kashan
         </a>
       </p>
+      <SpaceShip />
     </>
   );
 }
