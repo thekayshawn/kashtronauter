@@ -93,6 +93,7 @@ function App() {
       }
 
       // Once images are loaded, fade preloader out.
+
       document.querySelector(".preloader")?.classList.add("opacity-0");
 
       // Remove overflow-y-hidden from body and root.
@@ -131,13 +132,13 @@ function App() {
       window.removeEventListener("keydown", handleWindowKeyDown);
       window.removeEventListener("click", handleWindowKeyDown);
 
-      // Fade out the welcome text.
+      // Fade out the welcome text as well as the about text.
       document.querySelector(".welcome-text")?.classList.add("!opacity-0");
+      document.querySelector(".about-text")?.classList.add("!opacity-0");
 
       // Then, slide down the foreground image.
       foregroundImg!.setAttribute(
         "style",
-        // Foreground image moves at half speed.
         `--tw-translate-y: 100%; transition: transform 2s ease-in-out .5s`
       );
 
@@ -158,11 +159,11 @@ function App() {
 
       // Let the ship animate in for 1 second.
       setTimeout(() => {
-        // Add shake animation to the space ship.
-        $spaceShip.classList.add("animate-shake");
+        // Add hyperdrive to the space ship.
+        $spaceShip.classList.add("hyperdrive");
 
-        // Fade out the background image.
-        backgroundImg!.classList.add("!opacity-0");
+        // Partially fade out the background image.
+        backgroundImg!.style.opacity = "0.01";
       }, 2000);
 
       let counter = parseInt($hyperdriveCounter.innerHTML);
@@ -170,46 +171,43 @@ function App() {
       // Play the hyperdrive sound.
       new Audio("/hyperdrive.mp3").play();
 
+      // Wait for 800 milliseconds, then
       setTimeout(() => {
         // An interval that counts down from 3 to 0.
         const hyperdriveInterval = setInterval(() => {
           counter--;
 
-          // As soon as counter reaches 0,
-          if (counter === 0) {
-            // Clear the interval
-            clearInterval(hyperdriveInterval);
-
-            // Remove the counter
-            $hyperdriveCounter.parentElement?.classList.add("!opacity-0");
-
-            // Wait for 1 second, then
-            // replace base shake animation with intense shake animation.
-            setTimeout(() => {
-              $spaceShip.classList.remove("animate-shake");
-              $spaceShip.classList.add("animate-shake-intense");
-
-              // Wait for 14 seconds, this is the duration of the hyperdrive.
-              setTimeout(() => {
-                // Replace intense shake with base shake.
-                $spaceShip.classList.remove("animate-shake-intense");
-                $spaceShip.classList.add("animate-shake");
-
-                // After 7 seconds, remove the shake animation.
-                setTimeout(() => {
-                  $spaceShip.classList.remove("animate-shake");
-                }, 8000);
-              }, 14000);
-            }, 1000);
+          if (counter > 0) {
+            // Update the counter as long as it is greater than 0.
+            if ($hyperdriveCounter) $hyperdriveCounter.innerHTML = counter + "";
 
             return;
           }
 
-          // Otherwise, update the counter.
-          if ($hyperdriveCounter) $hyperdriveCounter.innerHTML = counter + "";
+          // Else
+          // Clear the interval
+          clearInterval(hyperdriveInterval);
+
+          // Remove the counter
+          $hyperdriveCounter.parentElement?.classList.add("!opacity-0");
+
+          // Wait for 1 second, then add intense hyperdrive.
+          setTimeout(() => {
+            $spaceShip.classList.add("hyperdrive-intense");
+
+            // Wait for 14 seconds, this is the duration of the hyperdrive.
+            setTimeout(() => {
+              // Remove the hyperdrive-intense class.
+              $spaceShip.classList.remove("hyperdrive-intense");
+
+              // After 7 seconds, remove the hyperdrive.
+              setTimeout(() => {
+                $spaceShip.classList.remove("hyperdrive");
+              }, 8000);
+            }, 14000);
+          }, 1000);
         }, 1000);
-        // Wait for 1 second, the ship animates meanwhile.
-      }, 1000);
+      }, 800);
     }
 
     backgroundImg.addEventListener("load", handleBgImgLoad);
@@ -282,7 +280,7 @@ function App() {
           to begin your journey through the cosmos.
         </p>
       </div>
-      <p className="fixed inline-block bottom-4 lg:bottom-8 right-4 lg:right-8 z-aboutText text-right text-xs drop-shadow-sm shadow-black">
+      <p className="about-text fixed inline-block bottom-4 lg:bottom-8 right-4 lg:right-8 z-aboutText text-right text-xs drop-shadow-sm shadow-black">
         An interstellar creation by{" "}
         <a
           target="_blank"

@@ -4,6 +4,7 @@ export default function SpaceShip() {
       id="spaceShip"
       className="fixed w-screen h-screen top-0 left-0 transition-all duration-1000 ease-out delay-1000 z-spaceShip !z-0 !opacity-0 !scale-[2]"
     >
+      {/* Hyperdrive Counter */}
       <div className="w-full fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-countdown flex flex-col items-center font-bold transition-opacity duration-1000 ease-out">
         <div className="text-[5vw] lg:text-[3vw]">Initiating Hyperdrive in</div>{" "}
         <div id="hyperdriveCounter" className="text-[20vw]">
