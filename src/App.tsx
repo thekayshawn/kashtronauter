@@ -187,7 +187,7 @@ function App() {
       hyperdriveTl.to($hyperdrive, {
         opacity: 1,
         duration: 1,
-        "--tw-hyperdrive-perspective": "0",
+        "--tw-hyperdrive-perspective": "1px",
       });
 
       // Then, after 13 seconds, animate the hyperdrive to be less intense.
