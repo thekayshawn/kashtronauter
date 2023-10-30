@@ -257,7 +257,7 @@ function App() {
                 opacity: 0.1,
               });
 
-              // After 7 seconds, remove the hyperdrive.
+              // After 7 seconds, remove the hyperdrive
               setTimeout(() => {
                 $spaceShip.classList.remove("hyperdrive");
 
