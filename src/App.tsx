@@ -1,6 +1,8 @@
+import gsap from "gsap";
 import SpaceShip from "./SpaceShip";
 import { useEffect, useRef } from "react";
 import { isScreenSize } from "./utils";
+import Hyperdrive from "./Hyperdrive";
 
 function App() {
   const backgroundImgRef = useRef<HTMLImageElement>(null);
@@ -11,15 +13,15 @@ function App() {
     /**
      * The background image.
      */
-    const backgroundImg = backgroundImgRef.current;
+    const $backgroundImg = backgroundImgRef.current;
 
     /**
      * The foreground image.
      */
-    const foregroundImg = foregroundImgRef.current;
+    const $foregroundImg = foregroundImgRef.current;
 
     // Guard against missing images.
-    if (!backgroundImg || !foregroundImg) return;
+    if (!$backgroundImg || !$foregroundImg) return;
 
     /**
      * Makes the images respond to mouse movement.
@@ -34,13 +36,13 @@ function App() {
       const twX = (x * 100) / 2;
       const twY = (y * 100) / 2;
 
-      backgroundImg!.setAttribute(
+      $backgroundImg!.setAttribute(
         "style",
         // Background image moves at default speed.
         `--tw-translate-x: ${twX}px; --tw-translate-y: ${twY}px;`
       );
 
-      foregroundImg!.setAttribute(
+      $foregroundImg!.setAttribute(
         "style",
         // Foreground image moves at half speed.
         `--tw-translate-x: ${twX / 2}px; --tw-translate-y: ${twY / 2}px;`
@@ -137,7 +139,7 @@ function App() {
       document.querySelector(".about-text")?.classList.add("!opacity-0");
 
       // Then, slide down the foreground image.
-      foregroundImg!.setAttribute(
+      $foregroundImg!.setAttribute(
         "style",
         `--tw-translate-y: 100%; transition: transform 2s ease-in-out .5s`
       );
@@ -150,20 +152,66 @@ function App() {
 
       // Then, get the space ship.
       const $spaceShip = document.getElementById("spaceShip");
+      const $hyperdrive = document.getElementById("hyperdrive");
       const $hyperdriveCounter = document.getElementById("hyperdriveCounter");
 
-      if (!$spaceShip || !$hyperdriveCounter) return;
+      if (!$spaceShip || !$hyperdrive || !$hyperdriveCounter) return;
 
       // And animate it in.
       $spaceShip.classList.remove("!z-0", "!opacity-0", "!scale-[2]");
+
+      // Also, fade the bg image out.
+      gsap.to($backgroundImg, {
+        opacity: 0,
+        duration: 2,
+      });
+
+      const hyperdriveTl = gsap.timeline();
+
+      // Then, animate the hyperdrive in.
+      hyperdriveTl.fromTo(
+        $hyperdrive,
+        {
+          opacity: 0,
+          "--tw-hyperdrive-perspective": "100px",
+        },
+        {
+          delay: 0.5,
+          opacity: 0.2,
+          duration: 4,
+          "--tw-hyperdrive-perspective": "10px",
+        }
+      );
+
+      // Then, animate the hyperdrive to be even more intense.
+      hyperdriveTl.to($hyperdrive, {
+        opacity: 1,
+        duration: 1,
+        "--tw-hyperdrive-perspective": "0",
+      });
+
+      // Then, after 13 seconds, animate the hyperdrive to be less intense.
+      hyperdriveTl.to(
+        $hyperdrive,
+        {
+          opacity: 0.2,
+          duration: 1,
+          "--tw-hyperdrive-perspective": "10px",
+        },
+        "+=13"
+      );
+
+      // Then, within 8 seconds, fade out the hyperdrive.
+      hyperdriveTl.to($hyperdrive, {
+        opacity: 0,
+        duration: 8,
+        perspective: "100px",
+      });
 
       // Let the ship animate in for 1 second.
       setTimeout(() => {
         // Add hyperdrive to the space ship.
         $spaceShip.classList.add("hyperdrive");
-
-        // Partially fade out the background image.
-        backgroundImg!.style.opacity = "0.01";
       }, 2000);
 
       let counter = parseInt($hyperdriveCounter.innerHTML);
@@ -195,14 +243,28 @@ function App() {
           setTimeout(() => {
             $spaceShip.classList.add("hyperdrive-intense");
 
+            // Set the hyperdrive perspective to 0 for an intense effect.
+            $hyperdrive.setAttribute("style", "--tw-hyperdrive-perspective: 0");
+
             // Wait for 14 seconds, this is the duration of the hyperdrive.
             setTimeout(() => {
               // Remove the hyperdrive-intense class.
               $spaceShip.classList.remove("hyperdrive-intense");
 
+              gsap.to("#hyperdriveDestination", {
+                delay: 3,
+                duration: 7,
+                opacity: 0.1,
+              });
+
               // After 7 seconds, remove the hyperdrive.
               setTimeout(() => {
                 $spaceShip.classList.remove("hyperdrive");
+
+                // Display the CTA.
+                document
+                  .getElementById("hyperdriveCta")
+                  ?.classList.remove("!opacity-0");
               }, 8000);
             }, 14000);
           }, 1000);
@@ -210,8 +272,8 @@ function App() {
       }, 800);
     }
 
-    backgroundImg.addEventListener("load", handleBgImgLoad);
-    foregroundImg.addEventListener("load", handleFgImgLoad);
+    $backgroundImg.addEventListener("load", handleBgImgLoad);
+    $foregroundImg.addEventListener("load", handleFgImgLoad);
 
     // Mousemove listener is only for desktop devices.
     if (isScreenSize("lg")) {
@@ -226,8 +288,8 @@ function App() {
       window.removeEventListener("mousemove", handleMouseMove);
 
       // Remove the load listeners.
-      backgroundImg.removeEventListener("load", handleBgImgLoad);
-      foregroundImg.removeEventListener("load", handleFgImgLoad);
+      $backgroundImg.removeEventListener("load", handleBgImgLoad);
+      $foregroundImg.removeEventListener("load", handleFgImgLoad);
 
       // Remove the keydown and click listener.
       window.removeEventListener("keydown", handleWindowKeyDown);
@@ -280,7 +342,7 @@ function App() {
           to begin your journey through the cosmos.
         </p>
       </div>
-      <p className="about-text fixed inline-block bottom-4 lg:bottom-8 right-4 lg:right-8 z-aboutText text-right text-xs drop-shadow-sm shadow-black">
+      <p className="about-text fixed inline-block bottom-4 lg:bottom-8 right-4 lg:right-8 z-aboutText text-right text-xs drop-shadow-sm shadow-black transition-opacity duration-1000">
         An interstellar creation by{" "}
         <a
           target="_blank"
@@ -291,6 +353,7 @@ function App() {
           Kashan
         </a>
       </p>
+      <Hyperdrive />
       <SpaceShip />
     </>
   );

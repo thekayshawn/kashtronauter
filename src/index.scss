@@ -9,6 +9,32 @@
   font-family: "Space Mono", monospace;
 }
 
+.rainbow {
+  transition: all 0.5s ease;
+  background: -webkit-linear-gradient(
+    90deg,
+    rgb(175, 224, 255) 0%,
+    rgb(168, 222, 255) 30%,
+    rgba(255, 255, 255, 1) 40%,
+    rgb(237, 182, 255) 50%,
+    rgb(240, 195, 255) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  &:is(:hover, :focus) {
+    -webkit-background-clip: initial;
+    -webkit-text-fill-color: #fff;
+    background: transparent;
+  }
+}
+
+.firefox .rainbow {
+  -webkit-background-clip: initial;
+  -webkit-text-fill-color: initial;
+  background: transparent;
+}
+
 @mixin hyperdrive($name) {
   animation: $name 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both infinite;
   backface-visibility: hidden;
@@ -249,5 +275,87 @@
   100% {
     transform: rotate(315deg) translateX(-2000px);
     opacity: 0;
+  }
+}
+
+/* Hyperdrive */
+/* @see https://codepen.io/noahblon/pen/DpNRyR */
+@keyframes hyperdrive {
+  0% {
+    transform: translateZ(-500px) rotate(0deg);
+  }
+  100% {
+    transform: translateZ(500px) rotate(0deg);
+  }
+}
+
+@keyframes hyperdrive-wall {
+  0% {
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+#hyperdrive {
+  @apply fixed w-screen h-screen top-0 left-0 text-center opacity-0;
+
+  &::before {
+    content: "";
+    @apply inline-block h-full align-middle;
+  }
+
+  .scene {
+    perspective-origin: center;
+    perspective: var(--tw-hyperdrive-perspective, 100px);
+    @apply relative inline-block align-middle;
+  }
+
+  .wrap {
+    transform-style: preserve-3d;
+    animation: hyperdrive 12s linear infinite forwards;
+    @apply absolute w-[1000px] h-[1000px] left-[-500px] top-[-500px] z-hyperdrive;
+
+    &:nth-child(2) {
+      animation-delay: 6s;
+
+      .wall {
+        animation-delay: 6s;
+      }
+    }
+  }
+
+  .wall {
+    background-size: cover;
+    background-image: url("/images/hyperdrive.jpg");
+    animation: hyperdrive-wall 12s linear infinite;
+    @apply absolute w-full h-full opacity-0 z-hyperdrive;
+
+    &.wall-right {
+      transform: rotateY(90deg) translateZ(500px);
+    }
+
+    &.wall-left {
+      transform: rotateY(-90deg) translateZ(500px);
+    }
+
+    &.wall-top {
+      transform: rotateX(90deg) translateZ(500px);
+    }
+
+    &.wall-bottom {
+      transform: rotateX(-90deg) translateZ(500px);
+    }
+
+    &.wall-back {
+      transform: rotateX(180deg) translateZ(500px);
+    }
   }
 }

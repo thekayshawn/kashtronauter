@@ -11,6 +11,56 @@ export default function SpaceShip() {
           3
         </div>
       </div>
+      {/* Hyperdrive CTA */}
+      <div
+        id="hyperdriveCta"
+        className="w-full fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-countdown flex flex-col items-center font-bold transition-opacity duration-1000 ease-out !opacity-0"
+      >
+        <div className="text-[7.5vw]">Coming Soon</div>
+        <div className="text-[2.5vw] lg:text-[1vw]">
+          An interstellar creation by{" "}
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://oikashan.com"
+            className="font-bold underline underline-offset-8 hover:underline-offset-4 focus:underline-offset-4 transition-all rainbow"
+          >
+            Kashan
+          </a>
+          <div className="mt-0 text-center">
+            <button
+              onClick={() => window.location.reload()}
+              className="border-white/10 border-solid border-[1px] rounded-full px-12 py-4 bg-black/20 text-lg font-bold inline-flex items-center gap-4 mt-8 hover:border-white/30 hover:bg-black/50 focus:border-white/30 focus:bg-black/50 transition-colors duration-200"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="24"
+                viewBox="0 -960 960 960"
+                width="24"
+                className="origin-right scale-75"
+              >
+                <path
+                  d="M480-80q-75 0-140.5-28.5t-114-77q-48.5-48.5-77-114T120-440h80q0 117 81.5 198.5T480-160q117 0 198.5-81.5T760-440q0-117-81.5-198.5T480-720h-6l62 62-56 58-160-160 160-160 56 58-62 62h6q75 0 140.5 28.5t114 77q48.5 48.5 77 114T840-440q0 75-28.5 140.5t-77 114q-48.5 48.5-114 77T480-80Z"
+                  fill="currentColor"
+                />
+              </svg>
+              Replay
+            </button>
+          </div>
+        </div>
+      </div>
+      {/* Hyperdrive Destination */}
+      <div
+        aria-hidden="true"
+        id="hyperdriveDestination"
+        className="z-hyperdrive fixed w-screen h-screen top-0 left-0 opacity-0"
+      >
+        <img
+          src="/images/destination.jpg"
+          className="w-full h-full object-cover"
+          alt="A breathtaking planet hidden between clouds scale-125 hyperdrive"
+        />
+      </div>
       <svg
         fill="none"
         width="9105"
