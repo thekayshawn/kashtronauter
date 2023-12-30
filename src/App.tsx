@@ -347,7 +347,7 @@ function App() {
         <a
           target="_blank"
           rel="noopener noreferrer"
-          href="https://oikashan.com"
+          href="https://kashanahmad.me"
           className="font-bold underline underline-offset-8 hover:underline-offset-4 focus:underline-offset-4 transition-all"
         >
           Kashan
